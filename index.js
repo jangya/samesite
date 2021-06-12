@@ -27,7 +27,7 @@ app.get('/samesite/css', (req, res) => {
     const cssFile = req.cookies['test'] ? 'green' : 'red';
     res.sendFile(`${cssFile}.css`, {root: clientDir});
 });
-if(!process.env.NODE_ENV) {
+if(!process.env.NODE_ENV !== 'production') {
     express().use(vhost('mongohost', app));
 }
 
