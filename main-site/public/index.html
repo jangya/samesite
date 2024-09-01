@@ -25,7 +25,7 @@
     <h2>Same-origin iframe:</h2>
     <iframe src="/iframe-content"></iframe>
     <h2>Cross-origin iframe:</h2>
-    <iframe src="http://localhost:3001"></iframe>
+    <iframe src="http://othersite.localhost:3001"></iframe>
     <h2>Test cookie transmission:</h2>
     <button onclick="checkCookie('get')">Check Cookie (GET)</button>
     <button onclick="checkCookie('post')">Check Cookie (POST)</button>
@@ -70,7 +70,7 @@
         }
 
         function checkCrossSiteCookie(method) {
-              const url = 'http://localhost:3001/check-cookie';
+              const url = 'http://othersite.localhost:3001/check-cookie';
               const options = {
                   method: method.toUpperCase(),
                   credentials: 'include'

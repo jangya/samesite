@@ -8,7 +8,7 @@ const port = 3000;
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cors({
-  origin: 'http://othersite.local:3001',
+  origin: 'http://othersite.localhost:3001',
   credentials: true
 }));
 
@@ -21,9 +21,9 @@ app.get('/set-cookie/:samesite', (req, res) => {
   const cookieValue = 'Hello from main site!';
   const cookieOptions = {
     sameSite: samesite,
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    secure: true,
     httpOnly: false,
-    domain: 'mainsite.local',
+    domain: 'mainsite.localhost',
   };
   
   console.log('Setting cookie with options:', cookieOptions);
@@ -52,5 +52,5 @@ app.get('/iframe-content', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Main site running at http://localhost:${port}`);
+  console.log(`Main site running at http://mainsite.localhost:${port}`);
 });

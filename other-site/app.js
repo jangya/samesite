@@ -8,7 +8,7 @@ const port = 3001;
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cors({
-  origin: 'http://mainsite.local:3000',
+  origin: 'http://mainsite.localhost:3000',
   credentials: true
 }));
 
@@ -27,5 +27,5 @@ app.post('/check-cookie', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Other site running at http://othersite.local:${port}`);
+  console.log(`Other site running at http://othersite.localhost:${port}`);
 });
