@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SameSite Cookie Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        iframe { width: 100%; height: 100px; border: 1px solid #ccc; }
+        button { margin: 10px 5px; }
+        #cookieInfo { background-color: #f0f0f0; padding: 10px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>SameSite Cookie Demo (Main Site)</h1>
+    <div id="cookieInfo">
+        <h3>Current Cookie State:</h3>
+        <pre id="currentCookie">Loading...</pre>
+    </div>
+    <div>
+        <button onclick="setCookie('Strict')">Set SameSite=Strict Cookie</button>
+        <button onclick="setCookie('Lax')">Set SameSite=Lax Cookie</button>
+        <button onclick="setCookie('None')">Set SameSite=None Cookie</button>
+    </div>
+    <h2>Same-origin iframe:</h2>
+    <iframe src="/iframe-content"></iframe>
+    <h2>Cross-origin iframe:</h2>
+    <iframe src="http://localhost:3001"></iframe>
+    <h2>Test cookie transmission:</h2>
+    <button onclick="checkCookie('get')">Check Cookie (GET)</button>
+    <button onclick="checkCookie('post')">Check Cookie (POST)</button>
+    <button onclick="checkCrossSiteCookie('get')">Check Cross-Site Cookie (GET)</button>
+    <button onclick="checkCrossSiteCookie('post')">Check Cross-Site Cookie (POST)</button>
+    <pre id="result"></pre>
+
+    <script>
+        function updateCookieInfo() {
+            fetch('/get-cookie')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('currentCookie').textContent = data.cookie;
+                });
+        }
+
+        function setCookie(samesite) {
+          fetch(`/set-cookie/${samesite}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                updateCookieInfo();
+                console.log('Cookie set:', data);
+            });
+        }
+
+        function checkCookie(method) {
+            const url = '/check-cookie';
+            const options = {
+                method: method.toUpperCase(),
+                credentials: 'include'
+            };
+            if (method === 'post') {
+                options.headers = { 'Content-Type': 'application/json' };
+                options.body = JSON.stringify({});
+            }
+            fetch(url, options)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+                });
+        }
+
+        function checkCrossSiteCookie(method) {
+              const url = 'http://localhost:3001/check-cookie';
+              const options = {
+                  method: method.toUpperCase(),
+                  credentials: 'include'
+              };
+              if (method === 'post') {
+                  options.headers = { 'Content-Type': 'application/json' };
+                  options.body = JSON.stringify({});
+              }
+              fetch(url, options)
+                  .then(response => response.json())
+                  .then(data => {
+                      const resultText = data.cookie === 'No cookie received'
+                          ? `Method: ${method.toUpperCase()}, Result: No cookie received (as expected)`
+                          : `Method: ${method.toUpperCase()}, Unexpected: Cookie received: ${data.cookie}`;
+                      document.getElementById('result').textContent = resultText;
+                      console.log('Cross-site cookie check result:', resultText);
+                  });
+          }
+
+        // Update cookie info on page load
+        updateCookieInfo();
+    </script>
+</body>
+</html>
