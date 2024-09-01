@@ -8,7 +8,7 @@ const port = 3001;
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cors({
-  origin: 'http://mainsite.localhost:3000',
+  origin: 'https://samesite-sooty.vercel.app/',
   credentials: true
 }));
 
@@ -27,5 +27,5 @@ app.post('/check-cookie', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Other site running at http://othersite.localhost:${port}`);
+  console.log(`Other site running at https://samesite-other.vercel.app/:${port}`);
 });

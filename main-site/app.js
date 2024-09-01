@@ -8,7 +8,7 @@ const port = 3000;
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cors({
-  origin: 'http://othersite.localhost:3001',
+  origin: 'https://samesite-other.vercel.app/',
   credentials: true
 }));
 
@@ -52,5 +52,5 @@ app.get('/iframe-content', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Main site running at http://mainsite.localhost:${port}`);
+  console.log(`Main site running at https://samesite-sooty.vercel.app/${port}`);
 });
